@@ -1,12 +1,13 @@
+"use strict";
 function rainbow(numOfSteps, step) {
     // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
     // Adam Cole, 2011-Sept-14
     // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
-    var r, g, b;
-    var h = step / numOfSteps;
-    var i = ~~(h * 6);
-    var f = h * 6 - i;
-    var q = 1 - f;
+    let r, g, b;
+    const h = step / numOfSteps;
+    const i = ~~(h * 6);
+    const f = h * 6 - i;
+    const q = 1 - f;
     switch(i % 6){
         case 0: r = 1; g = f; b = 0; break;
         case 1: r = q; g = 1; b = 0; break;
@@ -15,7 +16,7 @@ function rainbow(numOfSteps, step) {
         case 4: r = f; g = 0; b = 1; break;
         case 5: r = 1; g = 0; b = q; break;
     }
-    var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+    const c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
     return (c);
 }
 
@@ -24,13 +25,13 @@ function removeOldColumns() {
     columns.forEach((column) => column.remove());
 }
 
-function createNewColumns(nof) {
-    for (var i = 0; i < nof; i++) {
-        var div = document.createElement('div');
+function createNewColumns(res) {
+    res.forEach(() => {
+        const div = document.createElement('div');
         div.classList.add('column');
-        div.style.width = '' + (100 / nof) + '%';
+        div.style.width = '' + (100 / res.length) + '%';
         document.body.appendChild(div);
-    }
+    });
 }
 
 function draw(res, jobsLength) {
@@ -50,14 +51,13 @@ function draw(res, jobsLength) {
 }
 
 function calc(jobs, columns, options) {
-    var jobsLength = jobs.length;
-    var paragrapfs = [];
+    const jobsLength = jobs.length;
 
     //Remove all old markup
     removeOldColumns();
 
-    var res = LPT(jobs, columns, options);
-    createNewColumns(res.length);
+    const res = LPT(jobs, columns, options);
+    createNewColumns(res);
 
     draw(res, jobsLength);
 }
