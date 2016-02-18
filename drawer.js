@@ -67,4 +67,4 @@ console.log('E.g calc(ex1, 4, {cutoff: 10})');
 console.log('Predefined datasets; ex1 ex2 ex3 ex4 ex5 ex6');
 console.log('Dataset example; ', ex4);
 
-calc(ex1, 4);
+calc(ex6, 4, {cutoff: 5});

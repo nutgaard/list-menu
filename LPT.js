@@ -10,15 +10,31 @@ function findSmallest(array, excludeList) {
     excludeList = excludeList || [];
 
     const min = array
+        .map((a, id) => Object.assign({}, a, {id: id}))
         .filter((_, i) => excludeList.indexOf(i) < 0)
-        .reduce((acc, el, id) => {
+        .reduce((acc, el) => {
             if (el.value < acc.min) {
-                return {id: id, min: el.value};
+                return {id: el.id, min: el.value};
             }
             return acc;
         }, {idx: -1, min: Infinity});
 
+
     return min.id;
+}
+
+function calcExcludeList(machines) {
+    const exclusions = [machines.length - 1];
+
+    machines.forEach((machine, machineIndex) => {
+        const startsplitjobs = machine.jobs.filter((job) => job.cutoff === 1);
+
+        if (startsplitjobs.length !== 0) {
+            exclusions.push(machineIndex);
+        }
+    });
+
+    return exclusions;
 }
 
 function LPT(jobs, NOF_machines, options) {
@@ -36,8 +52,10 @@ function LPT(jobs, NOF_machines, options) {
     //Place jobs
     jobs.forEach((job, jobIndex) => {
         const size = valueGetter(job);
+        
         if (size > cutoff) {
-            const machineIndex = findSmallest(machines, [machines.length - 1]);
+            let machineIndex = findSmallest(machines, [machines.length - 1]);
+            machineIndex = findSmallest(machines, calcExcludeList(machines));
             var p1 = Math.ceil(size / 2);
             var p2 = size - p1;
 
